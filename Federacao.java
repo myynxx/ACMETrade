@@ -8,8 +8,8 @@ public class Federacao {
 		paises = new ArrayList<>(100);
 	}
 
-	public boolean adicionarPais(Pais p){
-		if(!verificarSiglaRepetida(p)){
+	public boolean adicionarPais(Pais p) {
+		if (!verificarSiglaRepetida(p)) {
 			paises.add(p);
 			return true;
 		}
@@ -17,14 +17,25 @@ public class Federacao {
 		return false;
 	}
 
-	public boolean verificarSiglaRepetida(Pais p){
-		for(int i=0;i<paises.size();i++){
+	public boolean verificarSiglaRepetida(Pais p) {
+		for (int i = 0; i < paises.size(); i++) {
 			Pais test = paises.get(i);
-			if(p.getSigla().equals(test.getSigla())){
+			if (p.getSigla().equals(test.getSigla())) {
 				return true;
-			} 
+			}
 		}
 
 		return false;
+	}
+
+	public Pais verificarSigla(String sigla) {
+		for (int i = 0; i < paises.size(); i++) {
+			Pais test = paises.get(i);
+			if (sigla.equals(test.getSigla())) {
+				return test;
+			}
+		}
+
+		return null;
 	}
 }

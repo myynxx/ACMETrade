@@ -56,7 +56,7 @@ public class Acordo {
 	private Pais comprador;
 	private Pais vendedor;
 
-	public Acordo(int codigo, String produto, double taxa, Pais vendedor, Pais comprador) {
+	public Acordo(int codigo, String produto, double taxa, Pais comprador, Pais vendedor) {
 		this.codigo = codigo;
 		this.produto = produto;
 		this.taxa = taxa;
@@ -64,7 +64,21 @@ public class Acordo {
 		this.comprador = comprador;
 	}
 
-	public int getCodigo(){
+	public int getCodigo() {
 		return codigo;
 	}
+
+	public Pais getComprador() {
+		return comprador;
+	}
+
+	public Pais getVendedor() {
+		return vendedor;
+	}
+
+	@Override
+	public String toString() {
+		return codigo + ";" + produto + ";" + taxa + ";" + comprador.getSigla() + ";" + vendedor.getSigla();
+	}
+
 }
