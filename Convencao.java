@@ -49,9 +49,7 @@ public class Convencao {
 
 	public boolean removerAcordosComprador(String sigla) {
 		for (int i = 0; i < acordos.size(); i++) {
-			Acordo test = acordos.get(i);
-			if (sigla.equals(test.getComprador().getSigla())) {
-				remover(sigla);
+			if (remover(sigla)) {
 				return true;
 			}
 		}
@@ -59,13 +57,16 @@ public class Convencao {
 		return false;
 	}
 
-	public void remover(String sigla) {
+	public boolean remover(String sigla) {
 		for (int i = 0; i < acordos.size(); i++) {
 			Acordo test = acordos.get(i);
 			if (sigla.equals(test.getComprador().getSigla())) {
 				acordos.remove(test);
+
+				return true;
 			}
 		}
+		return false;
 	}
 
 	public ArrayList<Acordo> listarTodosAcordos() {
