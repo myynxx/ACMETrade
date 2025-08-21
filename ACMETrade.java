@@ -76,6 +76,8 @@ public class ACMETrade {
 		System.out.println("=-=-=-=-= MENU =-=-=-=-=\n");
 
 		System.out.println("[0] - Sair");
+		System.out.println("[1] - Cadastrar país");
+		System.out.println("[2] - Cadastrar acordo");
 		System.out.println("[3] - Consultar país pela sigla");
 		System.out.println("[4] - Consultar acordo pelo código");
 		System.out.println("[5] - Consultar acordo pela sigla do comprador");
