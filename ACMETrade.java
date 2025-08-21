@@ -1,13 +1,26 @@
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.PrintStream;
+import java.nio.charset.Charset;
+import java.util.Locale;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class ACMETrade {
-	private Scanner entrada;
+	private Scanner entrada = new Scanner(System.in);  // Atributo para entrada padrao (teclado)
 	private Convencao convencao;
 	private Federacao federacao;
 
+	// Atributos para redirecionamento de E/S
+    private PrintStream saidaPadrao = System.out;   // Guarda a saida padrao - tela (console)
+    private final String nomeArquivoEntrada = "entrada.txt";  // Nome do arquivo de entrada de dados
+    private final String nomeArquivoSaida = "saida.txt";  // Nome do arquivo de saida de dados
+
 	public ACMETrade() {
-		entrada = new Scanner(System.in);
+		redirecionaEntrada();    // Redireciona Entrada para arquivos
+        //redirecionaSaida();    // Redireciona Saida para arquivos
+		//entrada = new Scanner(System.in);
 		convencao = new Convencao();
 		federacao = new Federacao();
 	}
@@ -63,8 +76,6 @@ public class ACMETrade {
 		System.out.println("=-=-=-=-= MENU =-=-=-=-=\n");
 
 		System.out.println("[0] - Sair");
-		System.out.println("[1] - Cadastrar país");
-		System.out.println("[2] - Cadastrar acordo");
 		System.out.println("[3] - Consultar país pela sigla");
 		System.out.println("[4] - Consultar acordo pelo código");
 		System.out.println("[5] - Consultar acordo pela sigla do comprador");
@@ -77,16 +88,20 @@ public class ACMETrade {
 	private void cadastrarPais() {
 		System.out.println("=-=-=-=-= CADASTRO DE PAIS =-=-=-=-=\n");
 
-		System.out.print("Digite o nome do país: ");
-		String nome = entrada.nextLine();
-
-		System.out.println();
-
-		boolean adicionado = false;
-
-		do {
+		while (true) {
+			boolean adicionado = false;
 			System.out.print("Digite a sigla do país: ");
 			String sigla = entrada.nextLine();
+
+			if (sigla.equals("-1")) {
+				System.out.println();
+				break;
+			}
+
+			System.out.print("Digite o nome do país: ");
+			String nome = entrada.nextLine();
+
+			System.out.println();
 
 			System.out.println();
 
@@ -98,8 +113,7 @@ public class ACMETrade {
 			} else {
 				System.out.println("[1:erro sigla repetida]\n");
 			}
-		} while (!adicionado);
-
+		}
 	}
 
 	private void cadastrarAcordo() {
@@ -110,76 +124,81 @@ public class ACMETrade {
 		String siglaC;
 		String siglaV;
 		Pais comprador, vendedor;
+		while (true) {
+			do {
+				System.out.print("Digite o código do acordo: ");
+				codigo = entrada.nextInt();
+				entrada.nextLine();
 
-		do {
-			System.out.print("Digite o código do acordo: ");
-			codigo = entrada.nextInt();
+				System.out.println();
+
+				if (!convencao.verificarCodigoRepetido(codigo)) {
+					codigoValido = true;
+				} else {
+					System.out.println("[2:erro-codigo repetido]\n");
+				}
+
+			} while (!codigoValido);
+
+			if(codigo == -1){
+				break;	
+			}
+
+			System.out.print("Digite o nome do produto: ");
+			String produto = entrada.nextLine();
+
+			System.out.println();
+
+			System.out.print("Digite a taxa: ");
+			double taxa = entrada.nextDouble();
 			entrada.nextLine();
 
 			System.out.println();
 
-			if (!convencao.verificarCodigoRepetido(codigo)) {
-				codigoValido = true;
-			} else {
-				System.out.println("[2:erro-codigo repetido]\n");
-			}
+			boolean paisValido = false;
 
-		} while (!codigoValido);
+			do {
+				System.out.print("Digite a sigla do país comprador: ");
+				siglaC = entrada.nextLine();
 
-		System.out.print("Digite o nome do produto: ");
-		String produto = entrada.nextLine();
+				System.out.println();
 
-		System.out.println();
+				comprador = federacao.verificarSigla(siglaC);
 
-		System.out.print("Digite a taxa: ");
-		double taxa = entrada.nextDouble();
-		entrada.nextLine();
+				if (comprador != null) {
+					paisValido = true;
+				} else {
+					System.out.println("[2:erro-comprador inexistente]\n");
+				}
 
-		System.out.println();
+			} while (!paisValido);
 
-		boolean paisValido = false;
+			paisValido = false;
 
-		do {
-			System.out.print("Digite a sigla do país comprador: ");
-			siglaC = entrada.nextLine();
+			do {
+				System.out.print("Digite a sigla do país vendedor: ");
+				siglaV = entrada.nextLine();
 
-			System.out.println();
+				System.out.println();
 
-			comprador = federacao.verificarSigla(siglaC);
+				vendedor = federacao.verificarSigla(siglaV);
 
-			if (comprador != null) {
-				paisValido = true;
-			} else {
-				System.out.println("[2:erro-comprador inexistente]\n");
-			}
+				if (vendedor != null) {
+					paisValido = true;
+				} else {
+					System.out.println("[2:erro-vendedor inexistente]\n");
+				}
 
-		} while (!paisValido);
-
-		paisValido = false;
-
-		do {
-			System.out.print("Digite a sigla do país vendedor: ");
-			siglaV = entrada.nextLine();
+			} while (!paisValido);
 
 			System.out.println();
 
-			vendedor = federacao.verificarSigla(siglaV);
+			Acordo acordo = new Acordo(codigo, produto, taxa, comprador, vendedor);
 
-			if (vendedor != null) {
-				paisValido = true;
-			} else {
-				System.out.println("[2:erro-vendedor inexistente]\n");
-			}
+			convencao.cadastrarAcordo(acordo);
 
-		} while (!paisValido);
-
-		System.out.println();
-
-		Acordo acordo = new Acordo(codigo, produto, taxa, comprador, vendedor);
-
-		convencao.cadastrarAcordo(acordo);
-
-		System.out.println("[2:" + acordo + "]\n");
+			System.out.println("[2:" + acordo + "]\n");
+		}
 	}
 
 	private void consultarPaisPelaSigla() {
@@ -244,8 +263,10 @@ public class ACMETrade {
 		Pais p = federacao.verificarSigla(sigla);
 
 		if (p != null) {
-			System.out.print("Digite o novo nome do país: \n");
+			System.out.print("Digite o novo nome do país: ");
 			String nome = entrada.nextLine();
+
+			System.out.println();
 
 			p.setNome(nome);
 
@@ -303,5 +324,42 @@ public class ACMETrade {
 			System.out.println("9:erro-nenhum país encontrado");
 		}
 	}
+
+	// Redireciona Entrada de dados para arquivos em vez de teclado
+    // Chame este metodo para redirecionar a leitura de dados para arquivos
+    private void redirecionaEntrada() {
+        try {
+            BufferedReader streamEntrada = new BufferedReader(new FileReader(nomeArquivoEntrada));
+            entrada = new Scanner(streamEntrada);   // Usa como entrada um arquivo
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        Locale.setDefault(Locale.ENGLISH);   // Ajusta para ponto decimal
+        entrada.useLocale(Locale.ENGLISH);   // Ajusta para leitura para ponto decimal
+    }
+
+    // Redireciona Saida de dados para arquivos em vez da tela (terminal)
+    // Chame este metodo para redirecionar a escrita de dados para arquivos
+    private void redirecionaSaida() {
+        try {
+            PrintStream streamSaida = new PrintStream(new File(nomeArquivoSaida), Charset.forName("UTF-8"));
+            System.setOut(streamSaida);             // Usa como saida um arquivo
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        Locale.setDefault(Locale.ENGLISH);   // Ajusta para ponto decimal
+    }
+
+    // Restaura Entrada padrao para o teclado
+    // Chame este metodo para retornar a leitura de dados para o teclado
+    private void restauraEntrada() {
+        entrada = new Scanner(System.in);
+    }
+
+    // Restaura Saida padrao para a tela (terminal)
+    // Chame este metodo para retornar a escrita de dados para a tela
+    private void restauraSaida() {
+        System.setOut(saidaPadrao);
+    }
 
 }
