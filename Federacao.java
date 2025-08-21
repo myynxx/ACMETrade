@@ -20,7 +20,7 @@ public class Federacao {
 	public boolean verificarSiglaRepetida(Pais p) {
 		for (int i = 0; i < paises.size(); i++) {
 			Pais test = paises.get(i);
-			if (p.getSigla().equals(test.getSigla())) {
+			if (p.getSigla().equalsIgnoreCase(test.getSigla())) {
 				return true;
 			}
 		}
@@ -31,7 +31,7 @@ public class Federacao {
 	public Pais verificarSigla(String sigla) {
 		for (int i = 0; i < paises.size(); i++) {
 			Pais test = paises.get(i);
-			if (sigla.equals(test.getSigla())) {
+			if (sigla.equalsIgnoreCase(test.getSigla())) {
 				return test;
 			}
 		}

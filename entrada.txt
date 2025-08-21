@@ -15,6 +15,16 @@ Arroz
 10
 EUA
 BR
+20
+Batata
+15
+EUA
+BR
+90
+Trigo
+25
+BR
+EUA
 -1
 3
 BR
@@ -25,6 +35,7 @@ BR
 6
 EUA
 Canadá
+8
 7
 BR
 8

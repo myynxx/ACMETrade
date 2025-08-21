@@ -25,55 +25,54 @@ public class Convencao {
 		return false;
 	}
 
-	public Acordo consultarAcordo(int codigo) {
+	public ArrayList<Acordo> consultarAcordo(int codigo) {
+		ArrayList<Acordo> aux = new ArrayList<>();
 		for (int i = 0; i < acordos.size(); i++) {
 			Acordo test = acordos.get(i);
 			if (codigo == test.getCodigo()) {
-				return test;
+				aux.add(test);
 			}
 		}
 
-		return null;
+		return aux;
 	}
 
-	public Acordo consultarAcordo(String sigla) {
+	public ArrayList<Acordo> consultarAcordo(String sigla) {
+		ArrayList<Acordo> aux = new ArrayList<>();
 		for (int i = 0; i < acordos.size(); i++) {
 			Acordo test = acordos.get(i);
-			if (sigla.equals(test.getComprador().getSigla())) {
-				return test;
+			if (sigla.equalsIgnoreCase(test.getComprador().getSigla())) {
+				aux.add(test);
 			}
 		}
 
-		return null;
+		return aux;
 	}
 
 	public boolean removerAcordosComprador(String sigla) {
-		for (int i = 0; i < acordos.size(); i++) {
-			if (remover(sigla)) {
-				return true;
-			}
+		if (remover(sigla)) {
+			return true;
 		}
 
 		return false;
 	}
 
 	public boolean remover(String sigla) {
+		boolean removeu = false;
+
 		for (int i = 0; i < acordos.size(); i++) {
 			Acordo test = acordos.get(i);
-			if (sigla.equals(test.getComprador().getSigla())) {
+			if (sigla.equalsIgnoreCase(test.getComprador().getSigla())) {
 				acordos.remove(test);
-
-				return true;
+				i--;
+				removeu = true;
 			}
 		}
-		return false;
+
+		return removeu;
 	}
 
 	public ArrayList<Acordo> listarTodosAcordos() {
-		if (acordos.size() == 0) {
-			return null;
-		} else {
-			return acordos;
-		}
+		return new ArrayList<>(acordos);
 	}
 }

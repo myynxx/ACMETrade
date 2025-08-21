@@ -67,7 +67,7 @@ public class ACMETrade {
 					listarPaisesVendedores();
 					break;
 				default:
-					break;
+					System.out.println("[Opção inválida]\n");
 			}
 		}
 	}
@@ -91,7 +91,6 @@ public class ACMETrade {
 		System.out.println("=-=-=-=-= CADASTRO DE PAIS =-=-=-=-=\n");
 
 		while (true) {
-			boolean adicionado = false;
 			System.out.print("Digite a sigla do país: ");
 			String sigla = entrada.nextLine();
 
@@ -111,7 +110,6 @@ public class ACMETrade {
 
 			if (federacao.adicionarPais(p)) {
 				System.out.println("[1:" + p + "]\n");
-				adicionado = true;
 			} else {
 				System.out.println("[1:erro sigla repetida]\n");
 			}
@@ -121,12 +119,13 @@ public class ACMETrade {
 	private void cadastrarAcordo() {
 		System.out.println("=-=-=-=-= CADASTRO DE ACORDO =-=-=-=-=\n");
 
-		boolean codigoValido = false;
 		int codigo = 0;
 		String siglaC;
 		String siglaV;
 		Pais comprador, vendedor;
 		while (true) {
+			boolean codigoValido = false;
+
 			do {
 				System.out.print("Digite o código do acordo: ");
 				codigo = entrada.nextInt();
@@ -228,9 +227,9 @@ public class ACMETrade {
 
 		System.out.println();
 
-		Acordo a = convencao.consultarAcordo(codigo);
+		ArrayList<Acordo> a = convencao.consultarAcordo(codigo);
 
-		if (a != null) {
+		if (a.size() != 0) {
 			System.out.println("4:" + a);
 		} else {
 			System.out.println("[4:erro-codigo inexistente]\n");
@@ -245,9 +244,9 @@ public class ACMETrade {
 
 		System.out.println();
 
-		Acordo a = convencao.consultarAcordo(sigla);
+		ArrayList<Acordo> a = convencao.consultarAcordo(sigla);
 
-		if (a != null) {
+		if (a.size() != 0) {
 			System.out.println("5:" + a);
 		} else {
 			System.out.println("[5:erro-sigla inexistente]\n");
@@ -304,7 +303,7 @@ public class ACMETrade {
 
 		ArrayList<Acordo> lista = convencao.listarTodosAcordos();
 
-		if (lista != null) {
+		if (lista.size() != 0) {
 			for (int i = 0; i < lista.size(); i++) {
 				System.out.println("8:" + lista.get(i));
 			}
@@ -318,7 +317,18 @@ public class ACMETrade {
 
 		ArrayList<Acordo> lista = convencao.listarTodosAcordos();
 
-		if (lista != null) {
+		if (lista.size() != 0) {
+			for(int i=0;i<lista.size();i++){
+				Acordo test = lista.get(i);
+				for(int j=i+1;j<lista.size();j++){
+					Acordo comp = lista.get(j);
+
+					if(test.getVendedor().equals(comp.getVendedor())){
+						lista.remove(comp);
+					}
+				}
+			}
+
 			for (int i = 0; i < lista.size(); i++) {
 				System.out.println("9:" + lista.get(i).getVendedor());
 			}
