@@ -18,7 +18,7 @@ public class ACMETrade {
     private final String nomeArquivoSaida = "saida.txt";  // Nome do arquivo de saida de dados
 
 	public ACMETrade() {
-		redirecionaEntrada();    // Redireciona Entrada para arquivos
+		//redirecionaEntrada();    // Redireciona Entrada para arquivos
         //redirecionaSaida();    // Redireciona Saida para arquivos
 		//entrada = new Scanner(System.in);
 		convencao = new Convencao();
@@ -101,8 +101,6 @@ public class ACMETrade {
 
 			System.out.print("Digite o nome do país: ");
 			String nome = entrada.nextLine();
-
-			System.out.println();
 
 			System.out.println();
 
